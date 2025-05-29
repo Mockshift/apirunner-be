@@ -1,0 +1,15 @@
+{
+  "name": "apirunner",
+  "version": "1.0.0",
+  "description": "API Runner is a lightweight service that captures and visualizes API traffic for analysis and debugging.",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "author": "Kenan Günen",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0",
+    "nodemon": "^3.1.10"
+  }
+}
