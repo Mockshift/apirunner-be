@@ -2,8 +2,6 @@ const express = require('express');
 
 const app = express();
 
-const testt = 'aaa';
-
 app.get('/', (req, res) => {
   res.status(200).send('Hello, World!');
 });
