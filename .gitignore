@@ -81,3 +81,13 @@ prisma/generated/
 
 # Mac system metadata
 *.DS_Store
+
+# Husky hook'larının çalışma dizini
+.husky/_
+
+# Commitlint'in oluşturabileceği geçici dosyalar
+commitlint.config.js
+
+# lint-staged geçici patch dosyası (özellikle revert sırasında oluşabilir)
+.git/lint-staged_unstaged.patch
+
