@@ -1,83 +1,70 @@
-# node_modules - local dependencies, should not be versioned
+# ============================
+# 📦 Node.js / npm
+# ============================
 node_modules/
-
-# Logs
-logs/
-*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+.pnpm-debug.log*
 
-# Runtime data
-pids/
-*.pid
-*.seed
-*.pid.lock
-
-# Dependency directories
-jspm_packages/
-
-# Compiled output
+# ============================
+# ⚙️ Build / Distribution / Cache
+# ============================
 dist/
 build/
-
-# dotenv environment variables
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# System files
-.DS_Store
-Thumbs.db
-
-# IDEs & editors
-.vscode/
-.idea/
-*.sublime-workspace
-*.sublime-project
-
-# OS-specific files
-*.swp
-*~
-*.bak
-
-# Test coverage
+.cache/
+.next/
+out/
 coverage/
 .nyc_output/
-
-# TypeScript
-*.tsbuildinfo
-
-# Optional npm cache directory
-.npm/
-
-# Output of 'npm pack'
-*.tgz
-
-# Yarn Integrity file
-.yarn-integrity
-
-# PM2 logs and process files
-.pids/
-*.log
-
-# ESLint cache
 .eslintcache
+*.tsbuildinfo
+*.tgz
+*.zip
+*.bak
 
-# Parcel cache
-.cache/
+# ============================
+# ⚙️ Runtime & Git
+# ============================
+logs/
+*.log
+pids/
+*.pid
+*.pid.lock
 
-# Next.js build output (optional if using hybrid framework)
-.next/
+# Temporary patch created by lint-staged when reverting changes
+.git/lint-staged_unstaged.patch
 
-# Storybook build (if ever used for components)
-out/
+# ============================
+# 🧩 Husky / Lint-Staged / Commitlint
+# ============================
 
-# Prisma generated client (generated but not always source-controlled)
-prisma/generated/
+# Runtime directory used by Husky hooks
+.husky/_
 
-# Mac system metadata
-*.DS_Store
+# Commitlint configuration file (optional to ignore if managed externally)
+commitlint.config.js
+
+# ============================
+# 🔐 Environment Variables
+# ============================
+.env
+.env.*
+!.env.example
+
+# ============================
+# 💻 IDE / Editor Settings
+# ============================
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# ============================
+# 🖥 OS & Miscellaneous
+# ============================
+.DS_Store
+Thumbs.db
+*.swp
+*~
