@@ -5,6 +5,9 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon server.js",
+    "importDB": "node dev-data/import-dev-data.js --import",
+    "deleteDB": "node dev-data/import-dev-data.js --delete",
+    "debug": "nodemon --inspect server.js",
     "prepare": "husky"
   },
   "author": "Kenan Günen",

@@ -1,0 +1,112 @@
+[
+  {
+    "name": "James",
+    "surname": "Smith",
+    "email": "james.smith@example.com",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "active": true,
+    "role": "user",
+    "created": "2025-06-01T12:00:00.000Z",
+    "updatedAt": "2025-06-01T12:00:00.000Z"
+  },
+  {
+    "name": "Emily",
+    "surname": "Johnson",
+    "email": "emily.johnson@example.com",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "active": true,
+    "role": "user",
+    "created": "2025-06-01T12:00:01.000Z",
+    "updatedAt": "2025-06-01T12:00:01.000Z"
+  },
+  {
+    "name": "Oliver",
+    "surname": "Williams",
+    "email": "oliver.williams@example.com",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "active": true,
+    "role": "admin",
+    "created": "2025-06-01T12:00:02.000Z",
+    "updatedAt": "2025-06-01T12:00:02.000Z"
+  },
+  {
+    "name": "Sophie",
+    "surname": "Brown",
+    "email": "sophie.brown@example.com",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "active": true,
+    "role": "user",
+    "created": "2025-06-01T12:00:03.000Z",
+    "updatedAt": "2025-06-01T12:00:03.000Z"
+  },
+  {
+    "name": "George",
+    "surname": "Jones",
+    "email": "george.jones@example.com",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "active": true,
+    "role": "moderator",
+    "created": "2025-06-01T12:00:04.000Z",
+    "updatedAt": "2025-06-01T12:00:04.000Z"
+  },
+  {
+    "name": "Charlotte",
+    "surname": "Taylor",
+    "email": "charlotte.taylor@example.com",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "active": true,
+    "role": "user",
+    "created": "2025-06-01T12:00:05.000Z",
+    "updatedAt": "2025-06-01T12:00:05.000Z"
+  },
+  {
+    "name": "Henry",
+    "surname": "Lee",
+    "email": "henry.lee@example.com",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "active": true,
+    "role": "user",
+    "created": "2025-06-01T12:00:06.000Z",
+    "updatedAt": "2025-06-01T12:00:06.000Z"
+  },
+  {
+    "name": "Isla",
+    "surname": "Walker",
+    "email": "isla.walker@example.com",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "active": true,
+    "role": "editor",
+    "created": "2025-06-01T12:00:07.000Z",
+    "updatedAt": "2025-06-01T12:00:07.000Z"
+  },
+  {
+    "name": "Thomas",
+    "surname": "Hall",
+    "email": "thomas.hall@example.com",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "active": true,
+    "role": "user",
+    "created": "2025-06-01T12:00:08.000Z",
+    "updatedAt": "2025-06-01T12:00:08.000Z"
+  },
+  {
+    "name": "Amelia",
+    "surname": "White",
+    "email": "amelia.white@example.com",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "active": true,
+    "role": "user",
+    "created": "2025-06-01T12:00:09.000Z",
+    "updatedAt": "2025-06-01T12:00:09.000Z"
+  }
+]
