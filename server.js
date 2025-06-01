@@ -1,14 +1,21 @@
-const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const connectDB = require('./config/db');
 
 dotenv.config({ path: '.env' });
-const app = require('./app');
+const app = require('./src/app');
 
-const DB = process.env.MONGO_DB_URL.replace('<PASSWORD>', process.env.MONGO_DB_PASSWORD);
+const startServer = async () => {
+  try {
+    await connectDB();
 
-mongoose.connect(DB, {}).then(() => console.log('DB connection succesful!'));
+    const port = process.env.PORT || 3000;
+    app.listen(port, () => {
+      console.log('✅ Server is running on http://localhost:3000');
+    });
+  } catch (error) {
+    console.error('❌ Failed to start server:', error.message);
+    throw error;
+  }
+};
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log('Server is running on http://localhost:3000');
-});
+startServer();
