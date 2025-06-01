@@ -1,70 +1,83 @@
-# ============================
-# 📦 Node.js / npm
-# ============================
+# node_modules - local dependencies, should not be versioned
 node_modules/
+
+# Logs
+logs/
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-.pnpm-debug.log*
 
-# ============================
-# ⚙️ Build / Distribution / Cache
-# ============================
-dist/
-build/
-.cache/
-.next/
-out/
-coverage/
-.nyc_output/
-.eslintcache
-*.tsbuildinfo
-*.tgz
-*.zip
-*.bak
-
-# ============================
-# ⚙️ Runtime & Git
-# ============================
-logs/
-*.log
+# Runtime data
 pids/
 *.pid
+*.seed
 *.pid.lock
 
-# Temporary patch created by lint-staged when reverting changes
-.git/lint-staged_unstaged.patch
+# Dependency directories
+jspm_packages/
 
-# ============================
-# 🧩 Husky / Lint-Staged / Commitlint
-# ============================
+# Compiled output
+dist/
+build/
 
-# Runtime directory used by Husky hooks
-.husky/_
-
-# Commitlint configuration file (optional to ignore if managed externally)
-commitlint.config.js
-
-# ============================
-# 🔐 Environment Variables
-# ============================
+# dotenv environment variables
 .env
-.env.*
-!.env.example
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# ============================
-# 💻 IDE / Editor Settings
-# ============================
-.vscode/
-.idea/
-*.sublime-project
-*.sublime-workspace
-
-# ============================
-# 🖥 OS & Miscellaneous
-# ============================
+# System files
 .DS_Store
 Thumbs.db
+
+# IDEs & editors
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# OS-specific files
 *.swp
 *~
+*.bak
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# TypeScript
+*.tsbuildinfo
+
+# Optional npm cache directory
+.npm/
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# PM2 logs and process files
+.pids/
+*.log
+
+# ESLint cache
+.eslintcache
+
+# Parcel cache
+.cache/
+
+# Next.js build output (optional if using hybrid framework)
+.next/
+
+# Storybook build (if ever used for components)
+out/
+
+# Prisma generated client (generated but not always source-controlled)
+prisma/generated/
+
+# Mac system metadata
+*.DS_Store
