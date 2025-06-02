@@ -1,15 +1,21 @@
-const express = require('express');
 const dotenv = require('dotenv');
+const { connectDB } = require('./config/db');
 
 dotenv.config({ path: '.env' });
+const app = require('./src/app');
 
-const app = express();
+const startServer = async () => {
+  try {
+    await connectDB();
 
-app.get('/', (req, res) => {
-  res.status(200).send('Hello, World!');
-});
+    const port = process.env.PORT || 3000;
+    app.listen(port, () => {
+      console.log('✅ Server is running on http://localhost:3000');
+    });
+  } catch (error) {
+    console.error('❌ Failed to start server:', error.message);
+    throw error;
+  }
+};
 
-const port = 3000;
-app.listen(port, () => {
-  console.log('Server is running on http://localhost:3000');
-});
+startServer();

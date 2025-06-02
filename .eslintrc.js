@@ -9,11 +9,31 @@ module.exports = {
     ecmaVersion: 2021,
     sourceType: 'module',
   },
+  settings: {
+    'import/resolver': {
+      node: {
+        paths: ['.'],
+        extensions: ['.js', '.json'],
+      },
+    },
+  },
   rules: {
     'prettier/prettier': ['error'],
     'no-console': 'off',
     'no-underscore-dangle': 'off',
-    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+    'import/no-extraneous-dependencies': [
+      'error',
+      {
+        devDependencies: [
+          '**/*.test.js',
+          '**/*.spec.js',
+          '**/test/**',
+          '**/scripts/**',
+          '**/*.config.js',
+          '**/server.js',
+        ],
+      },
+    ],
     'node/no-unsupported-features/es-syntax': [
       'error',
       {

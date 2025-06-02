@@ -1,0 +1,16 @@
+const ERROR_CODES = {
+  // General Errors
+  FETCH_USERS_ERROR: 'FETCH_USERS_ERROR',
+  DELETE_USER_ERROR: 'DELETE_USER_ERROR',
+  UPDATE_USER_ROLE_ERROR: 'UPDATE_USER_ROLE_ERROR',
+
+  // Validation Errors
+  INVALID_USER_ROLE: 'INVALID_USER_ROLE',
+
+  // Resource Errors
+  USER_NOT_FOUND: 'USER_NOT_FOUND',
+};
+
+module.exports = {
+  ERROR_CODES,
+};

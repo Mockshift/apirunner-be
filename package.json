@@ -5,6 +5,9 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon server.js",
+    "importDB": "node dev-data/import-dev-data.js --import",
+    "deleteDB": "node dev-data/import-dev-data.js --delete",
+    "debug": "nodemon --inspect server.js",
     "prepare": "husky"
   },
   "author": "Kenan Günen",
@@ -12,7 +15,8 @@
   "dependencies": {
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
-    "nodemon": "^3.1.10"
+    "mongodb": "^6.16.0",
+    "mongoose": "^8.15.1"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": "eslint --format=eslint-formatter-friendly --max-warnings=0"
@@ -24,6 +28,7 @@
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^10.1.5",
     "eslint-formatter-friendly": "^7.0.0",
+    "eslint-import-resolver-node": "^0.3.9",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-node": "^11.1.0",
@@ -31,6 +36,7 @@
     "eslint-plugin-react": "^7.37.5",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.0",
+    "nodemon": "^3.1.10",
     "prettier": "^3.5.3"
   }
 }
