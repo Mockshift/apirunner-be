@@ -6,7 +6,10 @@ const userSchema = new mongoose.Schema({
   surname: String,
   email: String,
   password: String,
-  passwordConfirm: String,
+  passwordConfirm: {
+    type: String,
+    select: false,
+  },
   active: {
     type: Boolean,
     default: true,
@@ -25,6 +28,15 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+// This middleware will be executed before every query that starts with 'find' and gets only active users
+userSchema.pre(/^find/, function excludeInactiveUsers(next) {
+  this.find({ active: { $ne: false } });
+  this.select('-__v');
+  next();
+});
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
+
+// Admin
