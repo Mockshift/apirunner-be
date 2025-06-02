@@ -9,6 +9,9 @@ const ERROR_CODES = {
 
   // Resource Errors
   USER_NOT_FOUND: 'USER_NOT_FOUND',
+
+  // Route Errors
+  ROUTE_NOT_FOUND: 'ROUTE_NOT_FOUND',
 };
 
 module.exports = {

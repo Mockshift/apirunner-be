@@ -14,7 +14,6 @@ const getAllUsers = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       status: common.STATUS_TYPE.ERROR,
-      message: 'An error occurred while fetching users!',
       error: error.message,
       code: errorCodes.FETCH_USERS_ERROR,
     });
