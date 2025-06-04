@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 const userRouter = require('./routes/userRoutes');
+const { ERROR_CODES } = require('./constants/errorCodes');
 
 const app = express();
 
@@ -19,8 +20,10 @@ app.use(express.json({ limit: '10kb' }));
 app.use('/api/v1/users', userRouter);
 
 // For all unspecified routes
-app.all('*', (req, res, next) => {
-  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+app.all('*', (req, _res, next) => {
+  next(
+    new AppError(`Can't find ${req.originalUrl} on this server!`, 404, ERROR_CODES.ROUTE_NOT_FOUND),
+  );
 });
 
 // Error handling middleware
