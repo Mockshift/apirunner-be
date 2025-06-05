@@ -1,14 +1,35 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 const { USER_ROLE_TYPE } = require('../constants/common');
 
 const userSchema = new mongoose.Schema({
-  name: String,
-  surname: String,
-  email: String,
-  password: String,
+  name: {
+    type: String,
+    required: [true, 'Please tell us your name!'],
+    trim: true,
+  },
+  email: {
+    type: String,
+    required: [true, 'Please provide your email!'],
+    unique: true,
+    lowercase: true,
+    validate: [validator.isEmail, 'Please provide a valid email!'],
+  },
+  password: {
+    type: String,
+    required: [true, 'Please provide a password!'],
+    minlength: 8,
+    select: false,
+  },
   passwordConfirm: {
     type: String,
-    select: false,
+    required: [true, 'Please confirm your password!'],
+    validate: {
+      validator(el) {
+        return el === this.password;
+      },
+      message: 'Passwords do not match!',
+    },
   },
   active: {
     type: Boolean,
