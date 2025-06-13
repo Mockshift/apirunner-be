@@ -6,26 +6,40 @@ const sendErrorDev = (err, res) => {
     status: err.status,
     message: err.message,
     error: err,
+    code: err.code || null,
     stack: err.stack,
   });
 };
 
-// Error response in production environment
+/**
+ * Handles error responses in production environment.
+ * Differentiates between operational (trusted) and programming/unknown errors.
+ */
 const sendErrorProd = (err, res) => {
-  // Operational, trusted error
+  const statusCode = err.statusCode || 500;
+  const status = err.status || 'error';
+
   if (err.isOperational) {
-    res.status(err.statusCode).json({
-      status: err.status,
+    // Trusted, expected error (e.g. AppError)
+    return res.status(statusCode).json({
+      status,
       message: err.message,
-    });
-  } else {
-    // Programming or unknown error
-    console.error('💥 UNEXPECTED ERROR:', err);
-    res.status(500).json({
-      status: 'error',
-      message: 'Something went wrong!',
+      code: err.code || null, // Include custom app error code
     });
   }
+
+  // Unknown or programming error - don't expose internal details
+  console.error('💥 UNEXPECTED ERROR:', {
+    message: err.message,
+    name: err.name,
+    stack: err.stack,
+    code: err.code,
+  });
+
+  return res.status(500).json({
+    status: 'error',
+    message: 'Something went wrong!',
+  });
 };
 
 // Specific error transformers

@@ -22,7 +22,11 @@ app.use('/api/v1/users', userRouter);
 // For all unspecified routes
 app.all('*', (req, _res, next) => {
   next(
-    new AppError(`Can't find ${req.originalUrl} on this server!`, 404, ERROR_CODES.ROUTE_NOT_FOUND),
+    new AppError(
+      `Can't find ${req.originalUrl} on this server!`,
+      404,
+      ERROR_CODES.ROUTES.ROUTE_NOT_FOUND,
+    ),
   );
 });
 

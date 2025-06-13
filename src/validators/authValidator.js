@@ -8,3 +8,5 @@ exports.validateSignup = [
     .custom((value, { req }) => value === req.body.password)
     .withMessage('Passwords do not match'),
 ];
+
+exports.validateLogin = [body('email').isEmail(), body('password').notEmpty()];
