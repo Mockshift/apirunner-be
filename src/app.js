@@ -8,6 +8,7 @@ const { ERROR_CODES } = require('./constants/errorCodes');
 
 const app = express();
 
+// * MIDDLEWARES
 // Development logging
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
@@ -16,13 +17,22 @@ if (process.env.NODE_ENV === 'development') {
 // Middleware to parse incoming JSON requests
 app.use(express.json({ limit: '10kb' }));
 
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString();
+  next();
+});
+
 // * ROUTES
 app.use('/api/v1/users', userRouter);
 
 // For all unspecified routes
 app.all('*', (req, _res, next) => {
   next(
-    new AppError(`Can't find ${req.originalUrl} on this server!`, 404, ERROR_CODES.ROUTE_NOT_FOUND),
+    new AppError(
+      `Can't find ${req.originalUrl} on this server!`,
+      404,
+      ERROR_CODES.ROUTES.ROUTE_NOT_FOUND,
+    ),
   );
 });
 
