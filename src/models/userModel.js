@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const { USER_ROLE_TYPE } = require('../constants/common');
+const applyBaseSchemaDefaults = require('../utils/baseModel');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -88,5 +89,7 @@ userSchema.methods.isPasswordCorrect = async function isPasswordCorrect(
 };
 
 const User = mongoose.model('User', userSchema);
+
+applyBaseSchemaDefaults(userSchema);
 
 module.exports = User;
