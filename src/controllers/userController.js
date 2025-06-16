@@ -1,6 +1,6 @@
 const User = require('../models/userModel');
 const common = require('../constants/common');
-const ERROR_CODES = require('../constants/errorCodes');
+const { ERROR_CODES } = require('../constants/errorCodes');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 

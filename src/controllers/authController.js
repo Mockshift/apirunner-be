@@ -56,6 +56,22 @@ const login = catchAsync(async (req, res, next) => {
   });
 });
 
+/**
+ * Allows a logged-in user to update their password and returns a new JWT token.
+ *
+ * @route PATCH /api/v1/users/updateMyPassword
+ */
+const updateMyPassword = catchAsync(async (req, res, _next) => {
+  const { password, newPassword, newPasswordConfirm } = req.body;
+
+  console.log('***', password, newPassword, newPasswordConfirm);
+
+  return res.status(200).json({
+    status: STATUS_TYPE.SUCCESS,
+    token: null,
+  });
+});
+
 const protect = catchAsync(async (req, res, next) => {
   // 1) Getting token and check it's there
   const token = extractBearerToken(req);
@@ -100,5 +116,6 @@ const protect = catchAsync(async (req, res, next) => {
 module.exports = {
   signup,
   login,
+  updateMyPassword,
   protect,
 };
