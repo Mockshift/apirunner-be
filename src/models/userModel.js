@@ -49,6 +49,9 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  passwordChangedAt: {
+    type: Date,
+  },
 });
 
 /**
@@ -86,6 +89,26 @@ userSchema.methods.isPasswordCorrect = async function isPasswordCorrect(
   userPassword,
 ) {
   return bcrypt.compare(candidatePassword, userPassword);
+};
+
+/**
+ * Checks whether the user has changed their password **after** the JWT was issued.
+ *
+ * This is used to invalidate tokens if a password change occurred
+ * after the token was created — a key security check for sensitive routes.
+ *
+ * @param {number} JWTTimestamp - The `iat` (issued at) timestamp from the JWT, in seconds
+ * @returns {boolean} True if password was changed after token was issued, otherwise false
+ */
+userSchema.methods.isChangedPassword = async function isChangedPassword(JWTTimestamp) {
+  if (this.passwordChangedAt) {
+    const changedTimestamp = this.passwordChangedAt.getTime() / 1000;
+
+    return JWTTimestamp < changedTimestamp;
+  }
+
+  // False means NOT changed
+  return false;
 };
 
 const User = mongoose.model('User', userSchema);

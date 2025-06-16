@@ -5,7 +5,6 @@
  * - Converts `_id` to a more frontend-friendly `id`
  * - Preserves virtual fields in output
  *
- * Note: Uses a shallow clone of the return object to avoid ESLint no-param-reassign errors.
  *
  * @param {mongoose.Schema} schema - The Mongoose schema to apply transformations to
  */

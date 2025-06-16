@@ -8,11 +8,19 @@ const sendErrorDev = (err, res) => {
     message: err.message,
     error: err,
     code: err.code || null,
+    // trace: err.stack
+    //   ?.split('\n')
+    //   .filter((line) => line.includes('/src/'))
+    //   .map((line) => line.trim()),
+    // stack: err.stack?.split('\n').map((line) => line.trim()),
+  });
+
+  console.error({
+    message: err.message,
     trace: err.stack
       ?.split('\n')
       .filter((line) => line.includes('/src/'))
       .map((line) => line.trim()),
-    stack: err.stack?.split('\n').map((line) => line.trim()),
   });
 };
 
