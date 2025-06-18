@@ -20,6 +20,8 @@ function applyBaseSchemaDefaults(schema) {
     transformed.id = transformed._id;
     delete transformed._id;
     delete transformed.__v;
+    delete transformed.isDeleted;
+    delete transformed.archived;
 
     return transformed;
   };

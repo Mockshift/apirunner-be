@@ -20,23 +20,9 @@ const projectSchema = mongoose.Schema({
   },
 });
 
+projectSchema.index({ ownerId: 1, name: 1 }, { unique: true });
+
 applyBaseSchemaDefaults(projectSchema);
 const Project = mongoose.model('Project', projectSchema);
 
 module.exports = Project;
-
-// 🔐 Ek Güvenlik Notu:
-// İstersen gelen istekten ownerId'yi silerek işleme al:
-
-// js
-// Kopyala
-// Düzenle
-// const { name, description } = req.body;
-
-// const project = await Project.create({
-//   name,
-//   description,
-//   ownerId: req.user.id
-// });
-// Bu şekilde kötü niyetli bir kullanıcının ownerId göndererek başkasının
-// adına kayıt yapma riskini de ortadan kaldırırsın.

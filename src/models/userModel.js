@@ -72,7 +72,7 @@ userSchema.pre('save', async function hashPasswordBeforeSave(next) {
  * Filters out inactive users from all `find` queries.
  */
 userSchema.pre(/^find/, function filterActiveUsers(next) {
-  this.find({ isDeleted: { $ne: false } });
+  this.find({ isDeleted: { $ne: true } });
   next();
 });
 

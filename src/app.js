@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 const userRouter = require('./routes/userRoutes');
+const projectRouter = require('./routes/projectRoutes');
 const { ERROR_CODES } = require('./constants/errorCodes');
 
 const app = express();
@@ -24,6 +25,7 @@ app.use((req, res, next) => {
 
 // * ROUTES
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/projects', projectRouter);
 
 // For all unspecified routes
 app.all('*', (req, _res, next) => {
