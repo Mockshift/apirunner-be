@@ -61,14 +61,44 @@ const login = catchAsync(async (req, res, next) => {
  *
  * @route PATCH /api/v1/users/updateMyPassword
  */
-const updateMyPassword = catchAsync(async (req, res, _next) => {
+const updateMyPassword = catchAsync(async (req, res, next) => {
   const { password, newPassword, newPasswordConfirm } = req.body;
+  const { user } = req;
+  console.log(req.body);
+  console.log(user);
+  const isPasswordCorrect = await user.isPasswordCorrect(password, user.password);
 
-  console.log('***', password, newPassword, newPasswordConfirm);
+  if (!isPasswordCorrect) {
+    return next(
+      new AppError(
+        'Your current password is incorrect. Please try again.',
+        401,
+        ERROR_CODES.AUTH.INVALID_CURRENT_PASSWORD,
+      ),
+    );
+  }
+
+  if (newPassword !== newPasswordConfirm) {
+    return next(
+      new AppError(
+        'New password and confirmation do not match.',
+        400,
+        ERROR_CODES.VALIDATION.PASSWORD_CONFIRMATION_MISMATCH,
+      ),
+    );
+  }
+
+  user.password = newPassword;
+  user.passwordConfirm = newPasswordConfirm;
+  user.passwordChangedAt = Date.now() - 1000; // ewidated
+
+  await user.save(); // 🔑 persist changes and trigger password hashing
+
+  const token = signToken({ id: user.id });
 
   return res.status(200).json({
     status: STATUS_TYPE.SUCCESS,
-    token: null,
+    token,
   });
 });
 

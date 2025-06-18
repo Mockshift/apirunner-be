@@ -101,7 +101,6 @@ userSchema.methods.isPasswordCorrect = async function isPasswordCorrect(
  * @returns {boolean} True if password was changed after token was issued, otherwise false
  */
 userSchema.methods.isChangedPassword = function isChangedPassword(JWTTimestamp) {
-  // console.log('*****çalıştım*******', this.passwordChangedAt);
   if (this.passwordChangedAt) {
     const changedTimestamp = this.passwordChangedAt.getTime() / 1000;
 
