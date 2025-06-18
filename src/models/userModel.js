@@ -8,6 +8,8 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'Please tell us your name!'],
+    minlength: [3, 'Name must be at least 3 characters long.'],
+    maxlength: [20, 'Name must be at most 20 characters long.'],
     trim: true,
   },
   email: {
@@ -20,7 +22,8 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, 'Please provide a password!'],
-    minlength: 8,
+    minlength: [3, 'Password must be at least 3 characters long.'],
+    maxlength: [20, 'Password must be at most 20 characters long.'],
   },
   passwordConfirm: {
     type: String,
@@ -32,10 +35,6 @@ const userSchema = new mongoose.Schema({
       },
       message: 'Passwords do not match!',
     },
-  },
-  active: {
-    type: Boolean,
-    default: true,
   },
   role: {
     type: String,
@@ -73,7 +72,7 @@ userSchema.pre('save', async function hashPasswordBeforeSave(next) {
  * Filters out inactive users from all `find` queries.
  */
 userSchema.pre(/^find/, function filterActiveUsers(next) {
-  this.find({ active: { $ne: false } });
+  this.find({ isDeleted: { $ne: false } });
   next();
 });
 
@@ -111,8 +110,7 @@ userSchema.methods.isChangedPassword = function isChangedPassword(JWTTimestamp) 
   return false;
 };
 
-const User = mongoose.model('User', userSchema);
-
 applyBaseSchemaDefaults(userSchema);
+const User = mongoose.model('User', userSchema);
 
 module.exports = User;

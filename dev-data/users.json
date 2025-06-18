@@ -5,7 +5,8 @@
     "email": "james.smith@example.com",
     "password": "pass1234",
     "passwordConfirm": "pass1234",
-    "active": true,
+    "isDeleted": false,
+    "archived": false,
     "role": "user",
     "created": "2025-06-01T12:00:00.000Z",
     "updatedAt": "2025-06-01T12:00:00.000Z"
@@ -16,7 +17,8 @@
     "email": "emily.johnson@example.com",
     "password": "pass1234",
     "passwordConfirm": "pass1234",
-    "active": true,
+    "isDeleted": false,
+    "archived": false,
     "role": "user",
     "created": "2025-06-01T12:00:01.000Z",
     "updatedAt": "2025-06-01T12:00:01.000Z"
@@ -27,7 +29,8 @@
     "email": "oliver.williams@example.com",
     "password": "pass1234",
     "passwordConfirm": "pass1234",
-    "active": true,
+    "isDeleted": false,
+    "archived": false,
     "role": "admin",
     "created": "2025-06-01T12:00:02.000Z",
     "updatedAt": "2025-06-01T12:00:02.000Z"
@@ -38,7 +41,8 @@
     "email": "sophie.brown@example.com",
     "password": "pass1234",
     "passwordConfirm": "pass1234",
-    "active": true,
+    "isDeleted": false,
+    "archived": false,
     "role": "user",
     "created": "2025-06-01T12:00:03.000Z",
     "updatedAt": "2025-06-01T12:00:03.000Z"
@@ -49,7 +53,8 @@
     "email": "george.jones@example.com",
     "password": "pass1234",
     "passwordConfirm": "pass1234",
-    "active": true,
+    "isDeleted": false,
+    "archived": false,
     "role": "moderator",
     "created": "2025-06-01T12:00:04.000Z",
     "updatedAt": "2025-06-01T12:00:04.000Z"
@@ -60,7 +65,8 @@
     "email": "charlotte.taylor@example.com",
     "password": "pass1234",
     "passwordConfirm": "pass1234",
-    "active": true,
+    "isDeleted": false,
+    "archived": false,
     "role": "user",
     "created": "2025-06-01T12:00:05.000Z",
     "updatedAt": "2025-06-01T12:00:05.000Z"
@@ -71,7 +77,8 @@
     "email": "henry.lee@example.com",
     "password": "pass1234",
     "passwordConfirm": "pass1234",
-    "active": true,
+    "isDeleted": false,
+    "archived": false,
     "role": "user",
     "created": "2025-06-01T12:00:06.000Z",
     "updatedAt": "2025-06-01T12:00:06.000Z"
@@ -82,7 +89,8 @@
     "email": "isla.walker@example.com",
     "password": "pass1234",
     "passwordConfirm": "pass1234",
-    "active": true,
+    "isDeleted": false,
+    "archived": false,
     "role": "editor",
     "created": "2025-06-01T12:00:07.000Z",
     "updatedAt": "2025-06-01T12:00:07.000Z"
@@ -93,7 +101,8 @@
     "email": "thomas.hall@example.com",
     "password": "pass1234",
     "passwordConfirm": "pass1234",
-    "active": true,
+    "isDeleted": false,
+    "archived": false,
     "role": "user",
     "created": "2025-06-01T12:00:08.000Z",
     "updatedAt": "2025-06-01T12:00:08.000Z"
@@ -104,7 +113,8 @@
     "email": "amelia.white@example.com",
     "password": "pass1234",
     "passwordConfirm": "pass1234",
-    "active": true,
+    "isDeleted": false,
+    "archived": false,
     "role": "user",
     "created": "2025-06-01T12:00:09.000Z",
     "updatedAt": "2025-06-01T12:00:09.000Z"
