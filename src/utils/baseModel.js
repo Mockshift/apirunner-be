@@ -21,5 +21,6 @@ function applyBaseSchemaDefaults(schema) {
 
   schema.set('toJSON', { virtuals: true, transform });
   schema.set('toObject', { virtuals: true, transform });
+  schema.set('timestamps', true);
 }
 module.exports = applyBaseSchemaDefaults;
