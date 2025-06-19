@@ -1,5 +1,6 @@
-const { STATUS_TYPE } = require('../constants/common');
+const { STATUS_TYPE, PROJECT_MEMBER_ROLE } = require('../constants/common');
 const Project = require('../models/projectModel');
+const ProjectMember = require('../models/projectMemberModel');
 const catchAsync = require('../utils/catchAsync');
 
 /**
@@ -16,6 +17,12 @@ const createProject = catchAsync(async (req, res, _next) => {
   const populatedProject = await Project.findById(project.id).populate({
     path: 'ownerId',
     select: 'id name',
+  });
+
+  await ProjectMember.create({
+    projectId: project.id,
+    userId: req.user.id,
+    role: PROJECT_MEMBER_ROLE.OWNER,
   });
 
   return res.status(201).json({

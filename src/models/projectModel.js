@@ -17,6 +17,7 @@ const projectSchema = mongoose.Schema({
   ownerId: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',
+    required: true,
   },
 });
 
