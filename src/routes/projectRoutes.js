@@ -13,6 +13,7 @@ router
     validate,
     authContoller.protect,
     projectController.createProject,
-  );
+  )
+  .get(authContoller.protect, projectController.getMyProjects);
 
 module.exports = router;
