@@ -21,13 +21,13 @@ const getAllUsers = catchAsync(async (_req, res, _next) => {
 });
 
 /**
- * Soft deletes a user by setting their `active` flag to false.
+ * Soft deletes a user by setting their `isDeleted` flag to false.
  * Does not remove the user document from the database.
  *
  * @route DELETE /api/v1/users/:id
  */
 const deleteUser = catchAsync(async (req, res, next) => {
-  const user = await User.findByIdAndUpdate(req.params.id, { active: false });
+  const user = await User.findByIdAndUpdate(req.params.id, { isDeleted: false });
 
   if (!user) {
     next(

@@ -36,12 +36,12 @@ const signup = catchAsync(async (req, res, _next) => {
  */
 const login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
+  console.log(`📩 Email from body: "${email}"`);
 
   // Check  user exist && password is correct
   const user = await User.findOne({ email }).select('+password');
-  const isPasswordCorrect = await user.isPasswordCorrect(password, user.password);
 
-  if (!user || !isPasswordCorrect) {
+  if (!user || !(await user.isPasswordCorrect(password, user.password))) {
     return next(
       new AppError('Incorrect email or password', 401, ERROR_CODES.VALIDATION.INVALID_CREDENTIALS),
     );
@@ -64,8 +64,6 @@ const login = catchAsync(async (req, res, next) => {
 const updateMyPassword = catchAsync(async (req, res, next) => {
   const { password, newPassword, newPasswordConfirm } = req.body;
   const { user } = req;
-  console.log(req.body);
-  console.log(user);
   const isPasswordCorrect = await user.isPasswordCorrect(password, user.password);
 
   if (!isPasswordCorrect) {

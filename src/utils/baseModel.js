@@ -9,12 +9,19 @@
  * @param {mongoose.Schema} schema - The Mongoose schema to apply transformations to
  */
 function applyBaseSchemaDefaults(schema) {
+  schema.add({
+    isDeleted: { type: Boolean, default: false },
+    archived: { type: Boolean, default: false },
+  });
+
   const transform = (_doc, ret) => {
     const transformed = { ...ret };
 
     transformed.id = transformed._id;
     delete transformed._id;
     delete transformed.__v;
+    delete transformed.isDeleted;
+    delete transformed.archived;
 
     return transformed;
   };
