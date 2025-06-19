@@ -36,7 +36,6 @@ const signup = catchAsync(async (req, res, _next) => {
  */
 const login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
-  console.log(`📩 Email from body: "${email}"`);
 
   // Check  user exist && password is correct
   const user = await User.findOne({ email }).select('+password');
@@ -46,13 +45,28 @@ const login = catchAsync(async (req, res, next) => {
       new AppError('Incorrect email or password', 401, ERROR_CODES.VALIDATION.INVALID_CREDENTIALS),
     );
   }
+  // Check if the user account is active
+  if (!user.active) {
+    return next(
+      new AppError(
+        'Your account has been deactivated. Please contact support.',
+        403,
+        ERROR_CODES.AUTH.INACTIVE_USER,
+      ),
+    );
+  }
 
-  // 3) If everythings ok send token to client
+  // If everythings ok send token to client
   const token = signToken({ id: user._id });
 
   return res.status(200).json({
     status: STATUS_TYPE.SUCCESS,
     token,
+    data: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    },
   });
 });
 

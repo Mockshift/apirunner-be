@@ -10,7 +10,14 @@ const USER_ROLE_TYPE = {
   MODERATOR: 'moderator',
 };
 
+const PROJECT_MEMBER_ROLE = {
+  OWNER: 'owner',
+  EDITOR: 'editor',
+  VIEWER: 'viewer',
+};
+
 module.exports = {
   STATUS_TYPE,
   USER_ROLE_TYPE,
+  PROJECT_MEMBER_ROLE,
 };

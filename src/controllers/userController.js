@@ -11,7 +11,7 @@ const AppError = require('../utils/appError');
  * @route GET /api/v1/users
  */
 const getAllUsers = catchAsync(async (_req, res, _next) => {
-  const users = await User.find(); // get all users
+  const users = await User.find().lean();
 
   res.status(200).json({
     status: common.STATUS_TYPE.SUCCESS,
@@ -30,12 +30,12 @@ const deleteUser = catchAsync(async (req, res, next) => {
   const user = await User.findByIdAndUpdate(req.params.id, { isDeleted: false });
 
   if (!user) {
-    next(
+    return next(
       new AppError(`No user found with ID: ${req.params.id}`, 404, ERROR_CODES.USER.USER_NOT_FOUND),
     );
   }
 
-  res.status(204).json({
+  return res.status(204).json({
     status: common.STATUS_TYPE.SUCCESS,
     data: null,
   });
@@ -45,7 +45,7 @@ const updateUserRole = catchAsync(async (req, res, next) => {
   const validRoles = Object.values(common.USER_ROLE_TYPE);
 
   if (!validRoles.includes(req.body.role)) {
-    next(
+    return next(
       new AppError(
         'The provided role is not recognized!',
         400,
@@ -57,12 +57,12 @@ const updateUserRole = catchAsync(async (req, res, next) => {
   const user = await User.findByIdAndUpdate(req.params.id, { role: req.body.role }, { new: true });
 
   if (!user) {
-    next(
+    return next(
       new AppError('No user found with the specified ID.', 404, ERROR_CODES.USER.USER_NOT_FOUND),
     );
   }
 
-  res.status(200).json({
+  return res.status(200).json({
     status: common.STATUS_TYPE.SUCCESS,
     data: user,
   });
