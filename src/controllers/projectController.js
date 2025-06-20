@@ -44,6 +44,12 @@ const createProject = catchAsync(async (req, res, _next) => {
   });
 });
 
+/**
+ * Retrieves all projects the current user is a member of.
+ * Includes project details and user's role in each project.
+ *
+ * @route GET /api/v1/projects
+ */
 const getMyProjects = catchAsync(async (req, res, next) => {
   const membershipRecords = await ProjectMember.find({ userId: req.user.id })
     .select('projectId role')
@@ -56,7 +62,7 @@ const getMyProjects = catchAsync(async (req, res, next) => {
   const formattedProjects = membershipRecords
     .filter((entry) => entry.projectId)
     .map((entry) => ({
-      id: entry.projectId.id,
+      id: entry.projectId._id,
       name: entry.projectId.name,
       description: entry.projectId.description,
       role: entry.role,
@@ -77,7 +83,59 @@ const getMyProjects = catchAsync(async (req, res, next) => {
   });
 });
 
+/**
+ * Retrieves detailed information about a specific project.
+ * Only accessible if the user is a member of the project.
+ *
+ * @route GET /api/v1/projects/:id
+ */
+
+const getProjectDetail = catchAsync(async (req, res, next) => {
+  const projectId = req.params.id;
+  const userId = req.user.id;
+
+  const project = await Project.findById(projectId).populate({
+    path: 'ownerId',
+    select: 'id name',
+  });
+
+  if (!project) {
+    return next(new AppError('Project not found.', 404, ERROR_CODES.PROJECT.NOT_FOUND));
+  }
+
+  const membership = await ProjectMember.findOne({
+    projectId,
+    userId,
+    active: true,
+  }).lean();
+
+  if (!membership) {
+    return next(
+      new AppError(
+        'You are not a member of this project.',
+        403,
+        ERROR_CODES.PROJECT.NOT_FOUND_FOR_USER,
+      ),
+    );
+  }
+
+  const membersCount = await ProjectMember.countDocuments({ projectId, active: true });
+
+  return res.status(200).json({
+    status: STATUS_TYPE.SUCCESS,
+    data: {
+      id: project.id,
+      name: project.name,
+      description: project.description,
+      createdAt: project.createdAt,
+      owner: project.ownerId, // populated { id, name }
+      membersCount,
+    },
+  });
+});
+
 module.exports = {
   createProject,
   getMyProjects,
+  getProjectDetail,
 };
