@@ -16,4 +16,6 @@ router
   )
   .get(authContoller.protect, projectController.getMyProjects);
 
+router.route('/:id').get(authContoller.protect, projectController.getProjectDetail);
+
 module.exports = router;

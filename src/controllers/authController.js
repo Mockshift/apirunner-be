@@ -47,17 +47,6 @@ const login = catchAsync(async (req, res, next) => {
     );
   }
 
-  // Check if the user account is active
-  if (!user.active) {
-    return next(
-      new AppError(
-        'Your account has been deactivated. Please contact support.',
-        403,
-        ERROR_CODES.AUTH.INACTIVE_USER,
-      ),
-    );
-  }
-
   return res.status(200).json({
     status: STATUS_TYPE.SUCCESS,
     token: signToken({ id: user.id }),
