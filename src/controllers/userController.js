@@ -44,24 +44,24 @@ const deleteUser = catchAsync(async (req, res, next) => {
 });
 
 const updateUserRole = catchAsync(async (req, res, next) => {
-  const { role } = req.body;
+  const { systemRole } = req.body;
 
-  if (!role) {
+  if (!systemRole) {
     return next(
       new AppError(
-        'Role is required in the request body.',
+        'systemRole is required in the request body.',
         400,
         ERROR_CODES.VALIDATION.MISSING_FIELDS,
       ),
     );
   }
 
-  const validRoles = Object.values(common.USER_ROLE_TYPE);
+  const validRoles = Object.values(common.SYSTEM_ROLE);
 
-  if (!validRoles.includes(role)) {
+  if (!validRoles.includes(systemRole)) {
     return next(
       new AppError(
-        `Invalid role: "${role}". Allowed roles are: ${validRoles.join(', ')}`,
+        `Invalid systemRole: "${systemRole}". Allowed roles are: ${validRoles.join(', ')}`,
         400,
         ERROR_CODES.VALIDATION.INVALID_USER_ROLE,
       ),
@@ -70,7 +70,7 @@ const updateUserRole = catchAsync(async (req, res, next) => {
 
   const updatedUser = await User.findByIdAndUpdate(
     req.params.id,
-    { role },
+    { systemRole },
     { new: true, runValidators: true },
   );
 
@@ -87,7 +87,7 @@ const updateUserRole = catchAsync(async (req, res, next) => {
         id: updatedUser.id,
         name: updatedUser.name,
         email: updatedUser.email,
-        role: updatedUser.role,
+        systemRole: updatedUser.systemRole,
       },
     },
   });

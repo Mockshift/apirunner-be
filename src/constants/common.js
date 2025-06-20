@@ -4,13 +4,13 @@ const STATUS_TYPE = {
   FAIL: 'fail',
 };
 
-const USER_ROLE_TYPE = {
+const SYSTEM_ROLE = {
   USER: 'user',
   ADMIN: 'admin',
   MODERATOR: 'moderator',
 };
 
-const PROJECT_MEMBER_ROLE = {
+const PROJECT_ROLE = {
   OWNER: 'owner',
   EDITOR: 'editor',
   VIEWER: 'viewer',
@@ -18,6 +18,6 @@ const PROJECT_MEMBER_ROLE = {
 
 module.exports = {
   STATUS_TYPE,
-  USER_ROLE_TYPE,
-  PROJECT_MEMBER_ROLE,
+  SYSTEM_ROLE,
+  PROJECT_ROLE,
 };
