@@ -14,7 +14,7 @@ const { extractBearerToken } = require('../utils/auth');
 const signup = catchAsync(async (req, res, _next) => {
   const { name, email, password, passwordConfirm } = req.body;
 
-  const newUser = await User.create({ name, email, password, passwordConfirm });
+  const newUser = await User.create({ name, email, password, passwordConfirm, role: 'user' });
 
   return res.status(201).json({
     status: STATUS_TYPE.SUCCESS,
@@ -139,7 +139,7 @@ const protect = catchAsync(async (req, res, next) => {
   }
 
   // Check if user still exist
-  const freshUser = await User.findById(decoded.id);
+  const freshUser = await User.findOne({ _id: decoded.id, isDeleted: { $ne: true } });
   if (!freshUser) {
     return next(
       new AppError(
