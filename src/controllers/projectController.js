@@ -71,7 +71,9 @@ const getMyProjects = catchAsync(async (req, res, next) => {
   return res.status(200).json({
     status: STATUS_TYPE.SUCCESS,
     result: formattedProjects.length,
-    data: { projects: formattedProjects },
+    data: {
+      projects: formattedProjects,
+    },
   });
 });
 

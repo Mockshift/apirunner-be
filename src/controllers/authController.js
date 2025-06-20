@@ -16,14 +16,15 @@ const signup = catchAsync(async (req, res, _next) => {
 
   const newUser = await User.create({ name, email, password, passwordConfirm });
 
-  res.status(201).json({
+  return res.status(201).json({
     status: STATUS_TYPE.SUCCESS,
     token: signToken({ id: newUser._id, role: newUser.role }),
     data: {
       user: {
-        id: newUser._id,
+        id: newUser.id,
         name: newUser.name,
         email: newUser.email,
+        role: newUser.role,
       },
     },
   });
@@ -45,6 +46,7 @@ const login = catchAsync(async (req, res, next) => {
       new AppError('Incorrect email or password', 401, ERROR_CODES.VALIDATION.INVALID_CREDENTIALS),
     );
   }
+
   // Check if the user account is active
   if (!user.active) {
     return next(
@@ -56,16 +58,16 @@ const login = catchAsync(async (req, res, next) => {
     );
   }
 
-  // If everythings ok send token to client
-  const token = signToken({ id: user._id });
-
   return res.status(200).json({
     status: STATUS_TYPE.SUCCESS,
-    token,
+    token: signToken({ id: user.id }),
     data: {
-      id: user.id,
-      name: user.name,
-      email: user.email,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
     },
   });
 });
@@ -78,6 +80,7 @@ const login = catchAsync(async (req, res, next) => {
 const updateMyPassword = catchAsync(async (req, res, next) => {
   const { password, newPassword, newPasswordConfirm } = req.body;
   const { user } = req;
+
   const isPasswordCorrect = await user.isPasswordCorrect(password, user.password);
 
   if (!isPasswordCorrect) {
@@ -102,32 +105,40 @@ const updateMyPassword = catchAsync(async (req, res, next) => {
 
   user.password = newPassword;
   user.passwordConfirm = newPasswordConfirm;
-  user.passwordChangedAt = Date.now() - 1000; // ewidated
+  user.passwordChangedAt = Date.now() - 1000;
 
-  await user.save(); // 🔑 persist changes and trigger password hashing
-
-  const token = signToken({ id: user.id });
+  await user.save();
 
   return res.status(200).json({
     status: STATUS_TYPE.SUCCESS,
-    token,
+    token: signToken({ id: user.id }),
+    data: {
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    },
   });
 });
 
+/**
+ * Middleware: Verifies JWT token and attaches user to req.
+ */
 const protect = catchAsync(async (req, res, next) => {
-  // 1) Getting token and check it's there
+  // Getting token and check it's there
   const token = extractBearerToken(req);
 
-  // 2) Verification token
+  // Verification token
   let decoded;
-
   try {
     decoded = await verifyToken(token, process.env.JWT_SECRET);
   } catch (err) {
     return next(err);
   }
 
-  // 3) Check if user still exist
+  // Check if user still exist
   const freshUser = await User.findById(decoded.id);
   if (!freshUser) {
     return next(
@@ -139,7 +150,7 @@ const protect = catchAsync(async (req, res, next) => {
     );
   }
 
-  // 4) Check if user changed password after token was issued
+  // Check if user changed password after token was issued
   if (freshUser.isChangedPassword(decoded.iat)) {
     return next(
       new AppError(

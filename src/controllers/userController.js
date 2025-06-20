@@ -13,10 +13,12 @@ const AppError = require('../utils/appError');
 const getAllUsers = catchAsync(async (_req, res, _next) => {
   const users = await User.find().lean();
 
-  res.status(200).json({
+  return res.status(200).json({
     status: common.STATUS_TYPE.SUCCESS,
     result: users.length,
-    data: { users },
+    data: {
+      users,
+    },
   });
 });
 
@@ -27,7 +29,7 @@ const getAllUsers = catchAsync(async (_req, res, _next) => {
  * @route DELETE /api/v1/users/:id
  */
 const deleteUser = catchAsync(async (req, res, next) => {
-  const user = await User.findByIdAndUpdate(req.params.id, { isDeleted: false });
+  const user = await User.findByIdAndUpdate(req.params.id, { isDeleted: true });
 
   if (!user) {
     return next(
@@ -42,21 +44,37 @@ const deleteUser = catchAsync(async (req, res, next) => {
 });
 
 const updateUserRole = catchAsync(async (req, res, next) => {
-  const validRoles = Object.values(common.USER_ROLE_TYPE);
+  const { role } = req.body;
 
-  if (!validRoles.includes(req.body.role)) {
+  if (!role) {
     return next(
       new AppError(
-        'The provided role is not recognized!',
+        'Role is required in the request body.',
+        400,
+        ERROR_CODES.VALIDATION.MISSING_FIELDS,
+      ),
+    );
+  }
+
+  const validRoles = Object.values(common.USER_ROLE_TYPE);
+
+  if (!validRoles.includes(role)) {
+    return next(
+      new AppError(
+        `Invalid role: "${role}". Allowed roles are: ${validRoles.join(', ')}`,
         400,
         ERROR_CODES.VALIDATION.INVALID_USER_ROLE,
       ),
     );
   }
 
-  const user = await User.findByIdAndUpdate(req.params.id, { role: req.body.role }, { new: true });
+  const updatedUser = await User.findByIdAndUpdate(
+    req.params.id,
+    { role },
+    { new: true, runValidators: true },
+  );
 
-  if (!user) {
+  if (!updatedUser) {
     return next(
       new AppError('No user found with the specified ID.', 404, ERROR_CODES.USER.USER_NOT_FOUND),
     );
@@ -64,7 +82,14 @@ const updateUserRole = catchAsync(async (req, res, next) => {
 
   return res.status(200).json({
     status: common.STATUS_TYPE.SUCCESS,
-    data: user,
+    data: {
+      user: {
+        id: updatedUser.id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        role: updatedUser.role,
+      },
+    },
   });
 });
 
