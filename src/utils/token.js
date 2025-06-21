@@ -18,7 +18,7 @@ const signToken = (payload, options = {}) => {
 /**
  * Verifies a JWT token and returns the decoded payload.
  *
- * Returns a Promise that resolves to the payload object (e.g. { id, role, iat, exp }).
+ * Returns a Promise that resolves to the payload object (e.g. { id, systemRole, iat, exp }).
  * Use with `await` inside a try/catch block to handle token verification errors.
  *
  * Example:

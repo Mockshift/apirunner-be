@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
-const { USER_ROLE_TYPE } = require('../constants/common');
+const { SYSTEM_ROLE } = require('../constants/common');
 const applyBaseSchemaDefaults = require('../utils/baseModel');
 
 const userSchema = new mongoose.Schema({
@@ -36,9 +36,9 @@ const userSchema = new mongoose.Schema({
       message: 'Passwords do not match!',
     },
   },
-  role: {
+  systemRole: {
     type: String,
-    default: USER_ROLE_TYPE.USER,
+    default: SYSTEM_ROLE.USER,
   },
   created: {
     type: Date,

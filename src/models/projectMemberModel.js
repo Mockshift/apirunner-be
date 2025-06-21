@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const applyBaseSchemaDefaults = require('../utils/baseModel');
-const { PROJECT_MEMBER_ROLE } = require('../constants/common');
+const { PROJECT_ROLE } = require('../constants/common');
 
 const projectMemberSchema = new mongoose.Schema({
   projectId: {
@@ -13,10 +13,10 @@ const projectMemberSchema = new mongoose.Schema({
     ref: 'User',
     required: [true, 'User ID is required'],
   },
-  role: {
+  projectRole: {
     type: String,
     enum: {
-      values: Object.values(PROJECT_MEMBER_ROLE),
+      values: Object.values(PROJECT_ROLE),
       message: 'Role must be one of: owner, editor, viewer',
     },
     required: [true, 'Role is required'],
