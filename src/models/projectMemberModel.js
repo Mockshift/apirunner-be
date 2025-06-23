@@ -21,10 +21,6 @@ const projectMemberSchema = new mongoose.Schema({
     },
     required: [true, 'Role is required'],
   },
-  active: {
-    type: Boolean,
-    default: true,
-  },
   joinedAt: {
     type: Date,
     default: Date.now,
@@ -45,7 +41,7 @@ projectMemberSchema.pre('save', function setJoinedAtIfMissing(next) {
  * Filters only active project members in all find queries.
  */
 projectMemberSchema.pre(/^find/, function filterActiveProjectMembers(next) {
-  this.find({ active: true });
+  this.find({ isDeleted: false });
   next();
 });
 

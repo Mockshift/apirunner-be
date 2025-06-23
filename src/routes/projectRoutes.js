@@ -30,4 +30,13 @@ router
     projectController.addProjectMember,
   );
 
+router
+  .route('/:projectId/members/:userId')
+  .delete(
+    protect,
+    authorizeProjectAccess,
+    restrictProjectRole(PROJECT_ROLE.OWNER, PROJECT_ROLE.EDITOR),
+    projectController.removeProjectMember,
+  );
+
 module.exports = router;
