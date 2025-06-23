@@ -4,12 +4,14 @@ const projectValidators = require('../validators/projectValidator');
 const validate = require('../middlewares/validate');
 const protect = require('../middlewares/protect');
 const authorizeProjectAccess = require('../middlewares/authorizeProjectAccess');
+const restrictProjectRole = require('../middlewares/restrictProjectRole');
+const { PROJECT_ROLE } = require('../constants/common');
 
 const router = express.Router();
 
 router
   .route('/')
-  .post(projectValidators.createProject, validate, protect, projectController.createProject)
+  .post(protect, projectValidators.createProject, validate, projectController.createProject)
   .get(protect, projectController.getMyProjects);
 
 router
@@ -18,6 +20,14 @@ router
 
 router
   .route('/:projectId/members')
-  .get(protect, authorizeProjectAccess, projectController.getProjectMembers);
+  .get(protect, authorizeProjectAccess, projectController.getProjectMembers)
+  .post(
+    protect,
+    projectValidators.addProjectMember,
+    validate,
+    authorizeProjectAccess,
+    restrictProjectRole(PROJECT_ROLE.OWNER, PROJECT_ROLE.EDITOR),
+    projectController.addProjectMember,
+  );
 
 module.exports = router;
