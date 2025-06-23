@@ -95,6 +95,7 @@ const getProjectDetail = catchAsync(async (req, res, _next) => {
 
   const membersCount = await ProjectMember.countDocuments({
     projectId: project._id,
+    isDeleted: false,
   });
 
   return res.status(200).json({
@@ -136,9 +137,9 @@ const getProjectMembers = catchAsync(async (req, res, next) => {
     );
   }
   const formatted = members
-    .filter((m) => m.userId) // populating user silinmiş olabilir, null gelebilir
+    .filter((m) => m.userId)
     .map((member) => ({
-      id: member.userId.id, // baseModel sayesinde
+      id: member.userId._id,
       name: member.userId.name,
       email: member.userId.email,
       systemRole: member.userId.systemRole,
@@ -155,6 +156,12 @@ const getProjectMembers = catchAsync(async (req, res, next) => {
   });
 });
 
+/**
+ * Lists active members of a project.
+ * Accessible only to project members.
+ *
+ * @route GET /api/v1/projects/:projectId/members
+ */
 const addProjectMember = catchAsync(async (req, res, next) => {
   const { projectRole, email } = req.body;
   const { project } = req;
@@ -173,7 +180,7 @@ const addProjectMember = catchAsync(async (req, res, next) => {
   // Count current active members
   const memberCount = await ProjectMember.countDocuments({
     projectId: project._id,
-    active: true,
+    isDeleted: false,
   });
 
   if (memberCount >= 3) {
@@ -230,10 +237,47 @@ const addProjectMember = catchAsync(async (req, res, next) => {
   });
 });
 
+/**
+ * Removes a member from the project (soft delete).
+ * Only owner or editor roles can perform this action.
+ *
+ * @route DELETE /api/v1/projects/:projectId/members/:userId
+ */
+const removeProjectMember = catchAsync(async (req, res, next) => {
+  const { userId, projectId } = req.params;
+
+  const memberToRemove = await ProjectMember.findOne({ projectId, userId });
+
+  if (!memberToRemove) {
+    return next(
+      new AppError('No such member found in the project.', 404, ERROR_CODES.PROJECT.NOT_FOUND),
+    );
+  }
+
+  const memberRole = memberToRemove.projectRole;
+
+  // Prevent removal of the project owner
+  if (memberRole === PROJECT_ROLE.OWNER) {
+    return next(
+      new AppError(
+        'Owner cannot be removed from the project.',
+        403,
+        ERROR_CODES.PROJECT.OWNER_CANNOT_BE_REMOVED,
+      ),
+    );
+  }
+
+  memberToRemove.isDeleted = true;
+  await memberToRemove.save();
+
+  return res.sendStatus(204);
+});
+
 module.exports = {
   createProject,
   getMyProjects,
   getProjectDetail,
   getProjectMembers,
   addProjectMember,
+  removeProjectMember,
 };

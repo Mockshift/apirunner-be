@@ -37,10 +37,7 @@ const deleteUser = catchAsync(async (req, res, next) => {
     );
   }
 
-  return res.status(204).json({
-    status: common.STATUS_TYPE.SUCCESS,
-    data: null,
-  });
+  return res.sendStatus(204);
 });
 
 const updateUserRole = catchAsync(async (req, res, next) => {
