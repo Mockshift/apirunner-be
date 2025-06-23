@@ -159,6 +159,33 @@ const addProjectMember = catchAsync(async (req, res, next) => {
   const { projectRole, email } = req.body;
   const { project } = req;
 
+  // Check if an owner already exists
+  if (projectRole === PROJECT_ROLE.OWNER) {
+    return next(
+      new AppError(
+        'You cannot assign the owner role to another member. A project can have only one owner.',
+        400,
+        ERROR_CODES.PROJECT.OWNER_ALREADY_EXISTS,
+      ),
+    );
+  }
+
+  // Count current active members
+  const memberCount = await ProjectMember.countDocuments({
+    projectId: project._id,
+    active: true,
+  });
+
+  if (memberCount >= 3) {
+    return next(
+      new AppError(
+        'Maximum member limit reached for this project.',
+        400,
+        ERROR_CODES.PROJECT.MEMBER_LIMIT_REACHED,
+      ),
+    );
+  }
+
   // Find user by email
   const user = await User.findOne({ email });
 
