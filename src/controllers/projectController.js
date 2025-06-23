@@ -4,6 +4,7 @@ const ProjectMember = require('../models/projectMemberModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const { ERROR_CODES } = require('../constants/errorCodes');
+const User = require('../models/userModel');
 
 /**
  * Creates a new project.
@@ -89,29 +90,24 @@ const getMyProjects = catchAsync(async (req, res, next) => {
  *
  * @route GET /api/v1/projects/:id
  */
-const getProjectDetail = catchAsync(async (req, res, next) => {
-  const { projectId } = req.params;
+const getProjectDetail = catchAsync(async (req, res, _next) => {
+  const { project } = req;
 
-  const project = await Project.findById(projectId).populate({
-    path: 'ownerId',
-    select: 'id name',
+  const membersCount = await ProjectMember.countDocuments({
+    projectId: project._id,
   });
-
-  if (!project) {
-    return next(new AppError('Project not found.', 404, ERROR_CODES.PROJECT.NOT_FOUND));
-  }
-
-  const membersCount = await ProjectMember.countDocuments({ projectId, active: true });
 
   return res.status(200).json({
     status: STATUS_TYPE.SUCCESS,
     data: {
-      id: project.id,
-      name: project.name,
-      description: project.description,
-      createdAt: project.createdAt,
-      owner: project.ownerId, // populated { id, name }
-      membersCount,
+      project: {
+        id: project._id,
+        name: project.name,
+        description: project.description,
+        createdAt: project.createdAt,
+        owner: project.ownerId,
+        membersCount,
+      },
     },
   });
 });
@@ -123,11 +119,10 @@ const getProjectDetail = catchAsync(async (req, res, next) => {
  * @route GET /api/v1/projects/:projectId/members
  */
 const getProjectMembers = catchAsync(async (req, res, next) => {
-  const { projectId } = req.params;
+  const projectId = req.project._id;
 
   const members = await ProjectMember.find({
     projectId,
-    active: true,
   })
     .populate({
       path: 'userId',
@@ -140,15 +135,16 @@ const getProjectMembers = catchAsync(async (req, res, next) => {
       new AppError('No members found for this project.', 404, ERROR_CODES.PROJECT.NOT_FOUND),
     );
   }
-
-  const formatted = members.map((member) => ({
-    id: member.userId._id,
-    name: member.userId.name,
-    email: member.userId.email,
-    systemRole: member.userId.systemRole,
-    projectRole: member.projectRole,
-    joinedAt: member.joinedAt,
-  }));
+  const formatted = members
+    .filter((m) => m.userId) // populating user silinmiş olabilir, null gelebilir
+    .map((member) => ({
+      id: member.userId.id, // baseModel sayesinde
+      name: member.userId.name,
+      email: member.userId.email,
+      systemRole: member.userId.systemRole,
+      projectRole: member.projectRole,
+      joinedAt: member.joinedAt,
+    }));
 
   return res.status(200).json({
     status: STATUS_TYPE.SUCCESS,
@@ -159,9 +155,58 @@ const getProjectMembers = catchAsync(async (req, res, next) => {
   });
 });
 
+const addProjectMember = catchAsync(async (req, res, next) => {
+  const { projectRole, email } = req.body;
+  const { project } = req;
+
+  // Find user by email
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return next(new AppError('User not found.', 404, ERROR_CODES.USER.USER_NOT_FOUND));
+  }
+
+  // Check if user is already a member of this project
+  const existing = await ProjectMember.findOne({
+    userId: user._id,
+    projectId: project._id,
+  });
+
+  if (existing) {
+    return next(
+      new AppError(
+        'User is already a member of this project.',
+        409,
+        ERROR_CODES.PROJECT.ALREADY_MEMBER,
+      ),
+    );
+  }
+
+  const member = await ProjectMember.create({
+    userId: user._id,
+    projectId: project._id,
+    projectRole,
+  });
+
+  return res.status(201).json({
+    status: STATUS_TYPE.SUCCESS,
+    data: {
+      member: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        systemRole: user.systemRole,
+        projectRoler: member.projectMember,
+        joinedAt: member.joinedAt,
+      },
+    },
+  });
+});
+
 module.exports = {
   createProject,
   getMyProjects,
   getProjectDetail,
   getProjectMembers,
+  addProjectMember,
 };

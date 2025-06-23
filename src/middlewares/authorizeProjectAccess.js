@@ -1,21 +1,28 @@
 const ProjectMember = require('../models/projectMemberModel');
 const AppError = require('../utils/appError');
 const { ERROR_CODES } = require('../constants/errorCodes');
+const Project = require('../models/projectModel');
 
 /**
- * Middleware: Checks if the authenticated user is an active member of the given projectId.
- *
- * - If membership exists, proceeds to the next middleware
- * - If not, responds with a 403 Forbidden error
+ * Middleware to verify whether the authenticated user is a member of the given project.
+ * Attaches populated project and membership info to the request object.
  */
 const authorizeProjectAccess = async (req, _res, next) => {
   const { projectId } = req.params;
   const userId = req.user.id;
+  if (!projectId || !userId) {
+    return next(
+      new AppError(
+        'Missing project or user information.',
+        400,
+        ERROR_CODES.VALIDATION.MISSING_FIELDS,
+      ),
+    );
+  }
 
   const membership = await ProjectMember.findOne({
     projectId,
     userId,
-    active: true,
   }).lean();
 
   if (!membership) {
@@ -28,8 +35,19 @@ const authorizeProjectAccess = async (req, _res, next) => {
     );
   }
 
-  // You can attach the membership info here for future role-based access control
-  // Example: req.membership = membership;
+  const project = await Project.findById(projectId)
+    .populate({
+      path: 'ownerId',
+      select: 'id name email',
+    })
+    .lean();
+
+  if (!project) {
+    return next(new AppError('Project not found.', 404, ERROR_CODES.PROJECT.NOT_FOUND));
+  }
+
+  req.projectMember = membership;
+  req.project = project;
 
   return next();
 };

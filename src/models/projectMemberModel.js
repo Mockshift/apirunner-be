@@ -41,6 +41,14 @@ projectMemberSchema.pre('save', function setJoinedAtIfMissing(next) {
   next();
 });
 
+/**
+ * Filters only active project members in all find queries.
+ */
+projectMemberSchema.pre(/^find/, function filterActiveProjectMembers(next) {
+  this.find({ active: true });
+  next();
+});
+
 applyBaseSchemaDefaults(projectMemberSchema);
 const ProjectMember = mongoose.model('ProjectMember', projectMemberSchema);
 
